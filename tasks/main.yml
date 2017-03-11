@@ -1,0 +1,6 @@
+- name: check OS
+  shell: cat /etc/system-release | grep Amazon Linux
+  register: grep_system_release_amazon_linux
+　　ignore_errors: True
+
+- include: install-docker-centos.yml when: grep_system_release_amazon_linux.rc != 0
