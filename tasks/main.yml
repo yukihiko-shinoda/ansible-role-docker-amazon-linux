@@ -1,6 +1,32 @@
-- name: check OS
-  shell: cat /etc/system-release | grep Amazon Linux
-  register: grep_system_release_amazon_linux
-　　ignore_errors: True
+---
+- name: install required packages
+  yum:
+    name: '{{ item }}'
+  with_items:
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
 
-- include: install-docker-centos.yml when: grep_system_release_amazon_linux.rc != 0
+- name: set up the stable repository
+  shell: "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo"
+  args:
+    chdir: "/etc/yum.repos.d"
+    creates: docker-ce.repo
+
+- name: install the latest version of Docker CE
+  yum:
+    name: docker-ce
+
+- name: setup Docker auto start
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: install Docker Compose
+  shell: curl -L "https://github.com/docker/compose/releases/download/1.11.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+- name: Setup permission
+  file:
+    path: /usr/local/bin/docker-compose
+    mode: 755
