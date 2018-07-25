@@ -1,0 +1,21 @@
+---
+- name: register uname s
+  command: uname -s
+  ignore_errors: yes
+  register: register_uname_s
+
+- name: register uname m
+  command: uname -m
+  ignore_errors: yes
+  register: register_uname_m
+
+- name: install Docker Compose
+  uri:
+    url: https://github.com/docker/compose/releases/download/1.11.2/docker-compose-{{ register_uname_s.stdout }}-{{ register_uname_m.stdout }}
+    dest: /usr/local/bin/docker-compose
+    creates: /usr/local/bin/docker-compose
+
+- name: Setup permission
+  file:
+    path: /usr/local/bin/docker-compose
+    mode: 755

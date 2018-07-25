@@ -1,4 +1,13 @@
 ---
+# @see http://blog.beta-desu.info/2016/09/16/docker_apt_failed/
+# @see https://qiita.com/yoshiya64/items/62d85f645499bf5b7eb6
+- name: set dns
+  blockinfile:
+    path: /etc/sysconfig/network-scripts/ifcfg-enp0s3
+    block: |
+      DNS1=8.8.8.8
+      DNS2=8.8.4.4
+
 - name: install required packages
   yum:
     name: '{{ item }}'
@@ -23,10 +32,18 @@
     state: started
     enabled: yes
 
-- name: install Docker Compose
-  shell: curl -L "https://github.com/docker/compose/releases/download/1.11.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+- name: set default DNS
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart docker
 
-- name: Setup permission
-  file:
-    path: /usr/local/bin/docker-compose
-    mode: 755
+- name: install docker, docker-compose by pip for Ansible module docker_service
+  pip:
+    name: '{{ item }}'
+  with_items:
+    - docker
+    - docker-compose
