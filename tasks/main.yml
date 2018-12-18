@@ -3,7 +3,7 @@
 # @see https://qiita.com/yoshiya64/items/62d85f645499bf5b7eb6
 - name: set dns
   blockinfile:
-    path: /etc/sysconfig/network-scripts/ifcfg-enp0s3
+    path: /etc/sysconfig/network-scripts/ifcfg-eth0
     block: |
       DNS1=8.8.8.8
       DNS2=8.8.4.4

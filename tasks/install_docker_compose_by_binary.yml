@@ -11,7 +11,7 @@
 
 - name: install Docker Compose
   uri:
-    url: https://github.com/docker/compose/releases/download/1.11.2/docker-compose-{{ register_uname_s.stdout }}-{{ register_uname_m.stdout }}
+    url: https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ register_uname_s.stdout }}-{{ register_uname_m.stdout }}
     dest: /usr/local/bin/docker-compose
     creates: /usr/local/bin/docker-compose
 
