@@ -10,11 +10,10 @@
 
 - name: install required packages
   yum:
-    name: '{{ item }}'
-  with_items:
-    - yum-utils
-    - device-mapper-persistent-data
-    - lvm2
+    name:
+      - yum-utils
+      - device-mapper-persistent-data
+      - lvm2
 
 - name: set up the stable repository
   shell: "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo"
@@ -43,7 +42,6 @@
 
 - name: install docker, docker-compose by pip for Ansible module docker_service
   pip:
-    name: '{{ item }}'
-  with_items:
-    - docker
-    - docker-compose
+    name:
+      - docker
+      - docker-compose
