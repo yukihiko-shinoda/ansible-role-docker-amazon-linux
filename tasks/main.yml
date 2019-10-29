@@ -1,4 +1,6 @@
 ---
+# @see https://docs.docker.com/install/linux/docker-ce/centos/
+
 # @see http://blog.beta-desu.info/2016/09/16/docker_apt_failed/
 # @see https://qiita.com/yoshiya64/items/62d85f645499bf5b7eb6
 - name: set dns
@@ -21,9 +23,12 @@
     chdir: "/etc/yum.repos.d"
     creates: docker-ce.repo
 
-- name: install the latest version of Docker CE
+- name: install Docker CE
   yum:
-    name: docker-ce
+    name:
+      - docker-ce-{{ docker_version }}
+      - docker-ce-cli-{{ docker_cli_version }}
+      - containerd.io
 
 - name: setup Docker auto start
   service:
@@ -40,8 +45,4 @@
     mode: 0644
   notify: restart docker
 
-- name: install docker, docker-compose by pip for Ansible module docker_service
-  pip:
-    name:
-      - docker
-      - docker-compose
+- include_tasks: install_docker_compose_by_binary.yml

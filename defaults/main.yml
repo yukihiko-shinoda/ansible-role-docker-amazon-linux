@@ -1,2 +1,4 @@
 ---
-docker_compose_version: 1.23.2
+docker_version: 18.09.1
+docker_cli_version: 19.03.4
+docker_compose_version: 1.24.1
