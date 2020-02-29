@@ -26,9 +26,12 @@
 - name: install Docker CE
   yum:
     name:
+      # Latest Docker CE depends on containerd.io >= 1.2.2-3, but none of the providers can be installed
+      # @see https://linuxconfig.org/how-to-install-docker-in-rhel-8
+      - https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
       - docker-ce-{{ docker_version }}
       - docker-ce-cli-{{ docker_cli_version }}
-      - containerd.io
+#      - containerd.io
 
 - name: setup Docker auto start
   service:
